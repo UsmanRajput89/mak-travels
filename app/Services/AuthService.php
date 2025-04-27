@@ -16,7 +16,7 @@ class AuthService
     public function register($data)
     {
         $user = $this->userRepository->create([
-            'name' => $data->name,
+            'username' => $data->username,
             'email' => $data->email,
             'password' => Hash::make($data->password),
         ]);

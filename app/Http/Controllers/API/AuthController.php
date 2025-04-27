@@ -21,13 +21,13 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $userDTO = new UserDTO($request->name, $request->email, $request->password);
+        $userDTO = new UserDTO($request->username, $request->email, $request->password);
 
         $user = $this->authService->register($userDTO);
 
         $response = [
             "token" => $user->createToken("mak-travels")->accessToken,
-            "name" => $user->name,
+            "username" => $user->username,
             "email" => $user->email,
         ];
 
@@ -48,7 +48,7 @@ class AuthController extends Controller
 
             $response = [
                 "token" => $user->createToken("mak-travels")->accessToken,
-                "name" => $user->name,
+                "username" => $user->username,
                 "email" => $user->email,
             ];
 

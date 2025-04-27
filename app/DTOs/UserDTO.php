@@ -3,13 +3,15 @@ namespace App\DTOs;
 
 class UserDTO
 {
-    public $name;
+    public $username;
     public $email;
     public $password;
+    public $first_name = null; 
+    public $last_name = null;   
 
-    public function __construct($name, $email, $password)
+    public function __construct($username, $email, $password)
     {
-        $this->name = $name;
+        $this->username = $username;
         $this->email = $email;
         $this->password = $password;
     }
