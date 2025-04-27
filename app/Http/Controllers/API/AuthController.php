@@ -2,93 +2,77 @@
 
 namespace App\Http\Controllers\API;
 
+use App\DTOs\UserDTO;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth;
+use Log;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'confirm_password' => 'required|same:password'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                "status" => 0,
-                "message" => "validation error",
-                "data" => $validator->errors()->all()
-            ], 422);
-        }
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ]);
-        
-        $response = [];
+    protected $authService;
 
-        $response["token"] = $user->createToken("mak-travels")->accessToken;
-        $response["name"] = $user->name;
-        $response["email"] = $user->email;
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $userDTO = new UserDTO($request->name, $request->email, $request->password);
+
+        $user = $this->authService->register($userDTO);
+
+        $response = [
+            "token" => $user->createToken("mak-travels")->accessToken,
+            "name" => $user->name,
+            "email" => $user->email,
+        ];
 
         return response()->json([
             "status" => 1,
             "message" => "User Registered Successfully",
-            "data" => $response
+            "data" => $response,
         ], 200);
     }
 
-    public function login(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json([
-                "status" => 0,
-                "message" => "Validation error",
-                "errors" => $validator->errors()
-            ], 422);
-        }
-    
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-            
+    public function login(LoginRequest $request)
+    {
+        $user = $this->authService->login($request->email, $request->password);
+
+        if ($user) {
             // Revoke all existing tokens for this user
             $user->tokens()->delete();
-            
+
             $response = [
                 "token" => $user->createToken("mak-travels")->accessToken,
                 "name" => $user->name,
-                "email" => $user->email
+                "email" => $user->email,
             ];
-    
+
             return response()->json([
                 "status" => 1,
                 "message" => "User logged in successfully",
-                "data" => $response
+                "data" => $response,
             ], 200);
         }
-    
+
         return response()->json([
             "status" => 0,
             "message" => "Invalid credentials",
-            "data" => null
+            "data" => null,
         ], 401);
     }
 
-    public function logout(Request $request) {
-        $request->user()->token()->delete();
+    public function logout(Request $request)
+    {
+        $response = $this->authService->logout();
+
         return response()->json([
             'status' => 1,
             'message' => 'Successfully logged out',
         ], 200);
     }
-
 }
