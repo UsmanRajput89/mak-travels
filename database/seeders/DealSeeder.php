@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Deal;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,6 @@ class DealSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Deal::factory()->count(50)->create();
     }
 }

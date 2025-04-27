@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('deals', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('origin');
+            $table->string('destination');
+            $table->decimal('price', 10, 2);
+            $table->string('currency', 3)->default('USD');
+            $table->date('departure_date');
+            $table->date('return_date')->nullable();
+            $table->string('provider')->default('Amadeus');
             $table->timestamps();
         });
     }
