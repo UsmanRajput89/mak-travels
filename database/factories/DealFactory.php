@@ -16,17 +16,30 @@ class DealFactory extends Factory
      */
     public function definition(): array
     {
+        $dealTypes = ['flight', 'hotel'];
+        $dealType = $this->faker->randomElement($dealTypes);
         $airportCodes = ['LAX', 'JFK', 'ORD', 'DFW', 'DEN'];
 
+        $hotelNames = ['Hilton', 'Marriott', 'Sheraton', 'Hyatt', 'Radisson'];
+        $hotelLocations = ['New York', 'Los Angeles', 'Chicago', 'Dallas', 'Denver'];
+
         return [
-            'title' => fake()->sentence(3),
-            'origin' => fake()->randomElement($airportCodes),
-            'destination' => fake()->randomElement($airportCodes),
-            'price' => fake()->randomFloat(2, 100, 1000),
+            'deal_type' => $dealType,
+            'title' => $this->faker->sentence(3),
+            'origin' => $dealType === 'flight' ? $this->faker->randomElement($airportCodes) : null,
+            'destination' => $dealType === 'flight' ? $this->faker->randomElement($airportCodes) : null,
+            'price' => $this->faker->randomFloat(2, 100, 1000),
             'currency' => 'USD',
-            'departure_date' => fake()->dateTimeBetween('+1 week', '+1 month')->format('Y-m-d'),
-            'return_date' => fake()->dateTimeBetween('+1 month', '+2 months')->format('Y-m-d'),
+            'departure_date' => $dealType === 'flight' 
+                ? $this->faker->dateTimeBetween('+1 week', '+1 month')->format('Y-m-d') 
+                : null,  
+            'return_date' => $dealType === 'flight' 
+                ? $this->faker->dateTimeBetween('+1 month', '+2 months')->format('Y-m-d') 
+                : null,
             'provider' => 'Amadeus',
+            'hotel_name' => $dealType === 'hotel' ? $this->faker->randomElement($hotelNames) : null,
+            'hotel_location' => $dealType === 'hotel' ? $this->faker->randomElement($hotelLocations) : null,
+            'deal_details' => json_encode(['raw' => $this->faker->text]),
         ];
     }
 }
