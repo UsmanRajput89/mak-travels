@@ -16,4 +16,6 @@ Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/deals', [DealController::class, 'allDeals']);
+    Route::get('/deals/{id} ', [DealController::class, 'getDealById']);
+    
 });

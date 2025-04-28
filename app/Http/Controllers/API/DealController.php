@@ -23,4 +23,13 @@ class DealController extends Controller
             "data" => $deals,
         ], 200);
     }
+    public function getDealById($id){
+        $deal = $this->dealService->getDealById($id);
+
+        if (!$deal) {
+            return response()->json(['message' => 'Deal not found'], 404);
+        }
+
+        return response()->json($deal);
+    }
 }
