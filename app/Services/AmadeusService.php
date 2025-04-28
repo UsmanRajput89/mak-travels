@@ -151,7 +151,7 @@ class AmadeusService
         foreach ($selectedHotels as $hotel) {
             $response = Http::withToken($accessToken)
                 ->get('https://test.api.amadeus.com/v3/shopping/hotel-offers', [
-                    'hotelIds' => 'RTPARGMP',
+                    'hotelIds' => $hotel['hotelId'],
                     'bestRateOnly' => true,
                 ]);
             $this->processHotelOffers($hotel, $response);
