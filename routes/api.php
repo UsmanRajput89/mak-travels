@@ -12,6 +12,9 @@ Route::get('/user', function (Request $request) {
 Route::get('/test', function () {
     return response()->json(['message' => 'API test endpoint']);
 });
+Route::post('/ptest', function () {
+    return response()->json(['message' => 'API test endpoint']);
+});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
