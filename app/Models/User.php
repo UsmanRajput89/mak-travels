@@ -48,4 +48,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Define the relationship with the Deal model
+    public function bookmarkedDeals()
+    {
+        return $this->belongsToMany(Deal::class, 'bookmark');
+    }
 }
