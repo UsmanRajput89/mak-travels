@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Services\AmadeusService;
+use Log;
 class DealsFetchCommand extends Command
 {
     /**
@@ -25,6 +26,8 @@ class DealsFetchCommand extends Command
      */
     public function handle(AmadeusService $amadeusService)
     {
+        Log::info('Start Amadeus API Command:');
+
         $this->info('Fetching flight deals...');
         $amadeusService->fetchFlightDeals();
 

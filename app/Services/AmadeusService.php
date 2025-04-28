@@ -82,7 +82,6 @@ class AmadeusService
 
     protected function processFlightOffers($response)
     {
-        Log::info('Amadeus API Response: ' . $response->body());
         $flightOffers = $response->json();
 
         if (!isset($flightOffers['data'])) {
