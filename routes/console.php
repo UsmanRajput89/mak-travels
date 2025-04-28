@@ -7,7 +7,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('deals:fetch')->everyMinute();
+// Schedule::command('deals:fetch')->everyMinute();
 
 Schedule::call(function () {
     Log::info('Inspiring Quote: ' . Inspiring::quote());
