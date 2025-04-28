@@ -10,8 +10,8 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:api');
 
 Route::get('/test', function () {
-    return response('API test endpoint', 200);
-})->middleware('auth:api');
+    return response()->json(['message' => 'API test endpoint']);
+});
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
